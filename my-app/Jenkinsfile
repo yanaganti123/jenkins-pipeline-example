@@ -15,6 +15,7 @@ pipeline {
         }
         stage('Build') {
             steps {
+                git 'https://github.com/akashpadwal/jenkins-pipeline-example.git'
                 sh 'mvn -B -DskipTests clean package'
             }
 
