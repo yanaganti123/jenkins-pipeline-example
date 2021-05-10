@@ -18,10 +18,14 @@ pipeline {
                 dir("/var/lib/jenkins/workspace/demopipelinetask/my-app") {
                 sh 'mvn -B -DskipTests clean package'
                 }
+            post {
+                success {
+                    junit 'target/devops-jenkins-pipelinetask/**/*.xml'    
+                }
             }
-
             
         }
         
     }
+            }
 }
