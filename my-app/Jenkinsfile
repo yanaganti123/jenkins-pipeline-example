@@ -28,7 +28,8 @@ environment {
         }
         stage('Cloning Git') {
           steps {
-            git 'https://github.com/akashpadwal/jenkins-pipeline-example.git'
+            git branch: 'main', credentialsId: 'akashpadwal', url: 'https://github.com/akashpadwal/jenkins-pipeline-example.git'
+
           }
         }
     stage('Building image') {
