@@ -1,16 +1,16 @@
 pipeline {
-    environment {
-      registry = "devopshint/dockerimg-test"
-      registryCredential = 'dockerhub'
-      dockerImage = ''
-  }
+    
     agent any
 
     tools {
         maven "MAVEN"
         jdk "JDK"
     }
-
+environment {
+      registry = "devopshint/dockerimg-test"
+      registryCredential = 'dockerhub'
+      dockerImage = ''
+  }
     stages {
         stage('Initialize'){
             steps {
