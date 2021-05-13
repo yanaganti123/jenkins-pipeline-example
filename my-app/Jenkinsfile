@@ -27,10 +27,14 @@ environment {
             }
         }
     stage('Create Docker Image') {
+      steps {
+        script {
     dir('my-app') {
       docker.build("devopshint/jenkins-pipeline:${env.BUILD_NUMBER}")
     }
   }
+      }
+    }
     stage('Deploy Image') {
       steps{
         script {
@@ -55,4 +59,4 @@ environment {
         testResults: '*/test-reports/.xml'
       )
       }
-   } 
+   }
