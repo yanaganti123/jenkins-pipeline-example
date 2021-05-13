@@ -13,7 +13,7 @@ pipeline {
 
     stages {
         stage('Initialize'){
-            steps{
+            steps {
                 echo "PATH = ${M2_HOME}/bin:${PATH}"
                 echo "M2_HOME = /opt/maven"
             }
@@ -25,12 +25,12 @@ pipeline {
                 }
 
             }
-        
+        }
         stage('Cloning Git') {
-      steps {
-        git 'https://github.com/akashpadwal/jenkins-pipeline-example.git'
-      }
-    }
+          steps {
+            git 'https://github.com/akashpadwal/jenkins-pipeline-example.git'
+          }
+        }
     stage('Building image') {
       steps{
         script {
@@ -63,4 +63,3 @@ pipeline {
       )
       }
    } 
-}
