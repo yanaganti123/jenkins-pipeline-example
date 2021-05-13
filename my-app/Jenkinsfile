@@ -7,7 +7,7 @@ pipeline {
         jdk "JDK"
     }
 environment {
-      registry = "devopshint/dockerimg-test"
+      registry = "devopshint/jenkins-pipeline"
       registryCredential = 'dockerhub'
       dockerImage = ''
   }
@@ -26,19 +26,11 @@ environment {
 
             }
         }
-        stage('Cloning Git') {
-          steps {
-            git branch: 'main', credentialsId: 'akashpadwal', url: 'https://github.com/akashpadwal/jenkins-pipeline-example.git'
-
-          }
-        }
-    stage('Building image') {
-      steps{
-        script {
-          dockerImage = docker.build registry + ":$BUILD_NUMBER"
-        }
-      }
+    stage('Create Docker Image') {
+    dir('my-app') {
+      docker.build("devopshint/jenkins-pipeline:${env.BUILD_NUMBER}")
     }
+  }
     stage('Deploy Image') {
       steps{
         script {
