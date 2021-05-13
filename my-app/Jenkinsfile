@@ -1,40 +1,71 @@
-pipeline {
-    
-    agent any
+pipeline { 
 
-    tools {
-        maven "MAVEN"
-        jdk "JDK"
+    environment { 
+
+        registry = "devopshint/jenkins-pipeline" 
+
+        registryCredential = 'dockerhub' 
+
+        dockerImage = '' 
+
     }
-environment {
-      registry = "devopshint/jenkins-pipeline"
-      registryCredential = 'dockerhub'
-      dockerImage = ''
-  }
-    stages {
-        stage('Initialize'){
-            steps {
-                echo "PATH = ${M2_HOME}/bin:${PATH}"
-                echo "M2_HOME = /opt/maven"
+
+    agent any 
+
+    stages { 
+
+        stage('Cloning our Git') { 
+
+            steps { 
+
+                git 'https://github.com/akashpadwal/jenkins-pipeline-example.git' 
+
             }
-        }
-        stage('Build') {
-            steps {
-                dir("/var/lib/jenkins/workspace/demopipelinetask/my-app") {
-                sh 'mvn -B -DskipTests clean package'
+
+        } 
+
+        stage('Building our image') { 
+
+            steps { 
+
+                script { 
+
+                    dockerImage = docker.build registry + ":$BUILD_NUMBER" 
+
                 }
 
+            } 
+
+        }
+
+        stage('Deploy our image') { 
+
+            steps { 
+
+                script { 
+
+                    docker.withRegistry( '', registryCredential ) { 
+
+                        dockerImage.push() 
+
+                    }
+
+                } 
+
             }
-        }
-    stage('Create Docker Image') {
-      steps {
-        script {
-    dir('my-app') {
-      docker.build("devopshint/jenkins-pipeline:${env.BUILD_NUMBER}")
+
+        } 
+
+        stage('Cleaning up') { 
+
+            steps { 
+
+                sh "docker rmi $registry:$BUILD_NUMBER" 
+
+            }
+
+        } 
+
     }
-  }
-      }
-    }
-        }
+
 }
-    
